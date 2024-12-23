@@ -1,0 +1,110 @@
+/* 顶部导航栏样式 */
+.header {
+    height: 60px;
+    background: #87CEEB;
+    color: white;
+}
+
+.header-content {
+    width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.header-content span {
+    font-size: 24px;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* 登录链接样式 */
+.login-link {
+    color: #ff4d4f;
+    padding: 5px 15px;
+    border: 1px solid #ff4d4f;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.login-link:hover {
+    background: #ff4d4f;
+    color: white;
+}
+
+/* 个人中心链接样式 */
+.nav-link {
+    color: white;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.nav-link:hover {
+    color: #e6e6e6;
+}
+
+/* 退出登录按钮样式 */
+.logout-btn {
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0;
+    opacity: 0.8;
+    transition: all 0.3s;
+}
+
+.logout-btn:hover {
+    opacity: 1;
+}
+
+/* 欢迎文本样式 */
+#welcome-text {
+    font-size: 14px;
+}
+
+/* 在原有样式基础上添加或修改 */
+.header {
+    height: 60px;
+    background: #87CEEB;
+    color: white;
+}
+
+.header-content {
+    width: 1200px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+}
+
+.nav-links a {
+    color: white;
+    text-decoration: none;
+    margin-left: 20px;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+.goods-link {
+    color: inherit;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.goods-link:hover {
+    color: #409eff;
+    transition: color 0.3s;
+} 

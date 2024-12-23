@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表 - 仿站电商平台</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/goods.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-content">
+            <h1>仿站电商平台</h1>
+            <div class="user-info">
+                <span id="welcome-text">您好!</span>
+                <a href="./login.html" id="login-link" class="login-link">请登录</a>
+                <a href="./user.html" id="user-center" class="nav-link" style="display: none;">个人中心</a>
+                <button class="logout-btn" onclick="logout()" id="logout-btn" style="display: none;">退出登录</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <h2>商品列表</h2>
+        
+        <!-- 商品列表容器 -->
+        <div class="goods-list" id="goodsList">
+            <!-- 商品将通过 JavaScript 动态插入 -->
+        </div>
+
+        <!-- 分页器 -->
+        <div class="pagination">
+            <button class="page-btn" onclick="goToPage(1)">首页</button>
+            <button class="page-btn" onclick="prevPage()">上一页</button>
+            <span class="page-info">
+                第 <span id="currentPage">1</span> 页 / 共 <span id="totalPages">1</span> 页
+            </span>
+            <button class="page-btn" onclick="nextPage()">下一页</button>
+            <button class="page-btn" onclick="goToLastPage()">尾页</button>
+            <div class="page-size-selector">
+                每页显示：
+                <select onchange="changePageSize(this.value)">
+                    <option value="12">12</option>
+                    <option value="24">24</option>
+                    <option value="36">36</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <script src="./相关资料/lib/axios.min.js"></script>
+    <script src="./js/goods.js"></script>
+</body>
+</html> 

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>商品详情 - 仿站电商平台</title>
+    <link rel="stylesheet" href="./css/common.css">
+    <link rel="stylesheet" href="./css/header.css">
+    <link rel="stylesheet" href="./css/goods-detail.css">
+</head>
+<body>
+    <!-- 顶部导航 -->
+    <header class="header">
+        <div class="header-content">
+            <h1>仿站电商平台</h1>
+            <div class="user-info">
+                <span id="welcome-text">您好!</span>
+                <a href="./login.html" id="login-link" class="login-link">请登录</a>
+                <a href="./user.html" id="user-center" class="nav-link" style="display: none;">个人中心</a>
+                <button class="logout-btn" onclick="logout()" id="logout-btn" style="display: none;">退出登录</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <div class="container">
+        <div class="breadcrumb">
+            <a href="./index.html">首页</a> &gt;
+            <a href="./goods.html">商品列表</a> &gt;
+            <span>商品详情</span>
+        </div>
+
+        <div class="goods-detail" id="goodsDetail">
+            <!-- 商品详情将通过JavaScript动态插入 -->
+        </div>
+    </div>
+
+    <script src="./相关资料/lib/axios.min.js"></script>
+    <script src="./js/goods-detail.js"></script>
+</body>
+</html> 

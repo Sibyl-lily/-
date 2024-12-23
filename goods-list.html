@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>商品列表</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        .container {
+            width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .goods-list {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .goods-item {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+        .goods-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            cursor: pointer;
+        }
+        .goods-item .title {
+            margin: 10px 0;
+            font-size: 14px;
+            height: 40px;
+            overflow: hidden;
+        }
+        .goods-item .price {
+            color: #f40;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .pagination {
+            text-align: center;
+        }
+        .pagination button {
+            padding: 5px 10px;
+            margin: 0 5px;
+            cursor: pointer;
+        }
+        .pagination select {
+            margin-left: 10px;
+            padding: 5px;
+        }
+        .pagination input {
+            width: 50px;
+            padding: 5px;
+            margin: 0 5px;
+        }
+        .back-btn {
+            margin-bottom: 20px;
+            padding: 8px 20px;
+            background: #6c757d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <button class="back-btn" onclick="location.href='./index.html'">返回首页</button>
+        <div class="goods-list" id="goodsList"></div>
+        <div class="pagination">
+            <button onclick="toPage(1)">首页</button>
+            <button onclick="toPage(currentPage - 1)">上一页</button>
+            <button onclick="toPage(currentPage + 1)">下一页</button>
+            <button onclick="toPage(totalPages)">尾页</button>
+            <span>当前第<span id="currentPage">1</span>页，共<span id="totalPages">1</span>页</span>
+            <select id="pageSize" onchange="changePageSize()">
+                <option value="12">12条/页</option>
+                <option value="24">24条/页</option>
+                <option value="36">36条/页</option>
+            </select>
+            <span>跳转到第</span>
+            <input type="number" id="jumpPage" min="1">
+            <button onclick="jumpToPage()">确定</button>
+        </div>
+    </div>
+
+    <script src="./相关资料/lib/axios.min.js"></script>
+    <script src="./js/goods-list.js"></script>
+</body>
+</html> 
