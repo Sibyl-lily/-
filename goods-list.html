@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品列表页面</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    width: 1200px;
+    margin: 0 auto;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: skyblue;
+    position: relative;
+    color: white
+  }
+
+  h1>p {
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 25px;
+    /* display: none; */
+  }
+
+  h1>p>a {
+    color: red;
+    text-decoration: none;
+  }
+
+  .box1 { /*分页*/
+    width: 1198px;
+    height: 78px;
+    margin: 0 auto;
+    display: flex;
+    background-color: #fff;
+    border: 1px solid #000;
+    /* justify-content: center; */
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .box1 span {
+    margin-left: 15px;
+  }
+
+  .box1 .first, /*首页*/
+  .box1 .end { /*末页*/
+    background-color: skyblue;
+    color: white;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 75px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .box1 .total { /*1/77*/
+    font-size: 20px;
+  }
+
+  .box1 .prev,/*上一页*/
+  .box1 .next {
+    background-color: skyblue;
+    color: white;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    width: 90px;
+    font-size: 20px;
+    cursor: pointer;
+  }
+
+  .box1 .jump {/*跳转页数*/
+    width: 50px;
+    height: 36px;
+    margin-left: 10px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  .box1 .jump1 { /*跳转*/
+    width: 50px;
+    height: 40px;
+    margin-left: 10px;
+    font-size: 20px;
+  }
+
+  .box1 .select {/*选择每页显示数量*/
+    width: 60px;
+    height: 40px;
+    margin-left: 10px;
+    font-size: 20px;
+    text-align: center;
+  }
+
+  ul li {/*商品列表*/
+    list-style: none;
+  }
+
+  ul {/*商品列表*/
+    width: 1200px;
+    margin: 10px auto;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: left;
+  }
+
+  li {/*商品文字列表*/
+    width: 295px;
+    border: 1px solid #333;
+    margin-right: 3.4px;
+    height: 510px;
+    margin-bottom: 10px;
+    /* box-sizing: border-box; */
+    /* padding: 8px; */
+  }
+
+  img {/*商品图片*/
+    width: 295px;
+    height: 350px;
+    display: block;
+  }
+
+  ul .title {/*商品*/
+    font-size: 20px;
+  }
+</style>
+
+<body>
+  <h1>仿站电商 · 商品列表
+    <p class="off "><a href="./index.html">回到首页</a></p>
+  </h1>
+  <div class="box1">
+    <span class="first">首页</span>
+    <span class="prev">上一页</span>
+    <span class="total">1 / 100</span>
+    <span class="next">下一页</span>
+    <span class="end">末页</span>
+    <input class='jump' type="text">
+    <button class="jump1">跳转</button>
+    <select class="select" name="" id="">
+      <option value="12">12</option>
+      <option value="16">16</option>
+      <option value="20">20</option>
+      <option value="24">24</option>
+    </select>
+  </div>
+  <ul>
+    <li>
+
+    </li>
+  </ul>
+</body>
+
+<script src="./axios.min.js"></script>
+<script src="./http.js"></script>
+<script>
+
+
+//选择页面（为分页功能做准备
+  let PageTotal;
+  let firstBtn = document.querySelector('.first');
+  let endBtn = document.querySelector('.end');
+  let prevBtn = document.querySelector('.prev');
+  let nextBtn = document.querySelector('.next');
+  let totalEle = document.querySelector('.total');
+  let selBtn = document.querySelector('.select');
+  let jumpnumber = document.querySelector('.jump');
+  let jumpBtn = document.querySelector('.jump1');
+  let ulBox = document.querySelector('ul');
+  const queryObj = {
+    current: 1,
+    pagesize: 12,
+  }
+
+  // 从服务器获得数据
+  async function getData() {
+    let res = await http.get('/goods/list', { params: queryObj })
+    //使用HTTP GET请求从服务器获取商品列表数据。
+    r = res.data.list;
+    //从响应中提取商品列表数据
+    
+    PageTotal = res.data.total;//从响应中提取总页数信息
+    // let currentData = res.data.list.slice((current - 1) * pagesize, current * pagesize);
+
+    let htmlStr = ''//初始化一个空字符串，用于存储生成的HTML代码
+    r.forEach(function(item) {
+      // console.log(item)
+      htmlStr += `
+      <li>
+      <img src="${item.img_big_logo}" alt="">
+      <p class="title">${item.title}</p>
+      <div class="info">
+        <p>￥ ${item.current_price}</p>
+        <p>￥ ${item.price}</p>
+      </div>
+    </li>`
+      //遍历商品列表r，为每个商品生成一个<li>元素的HTML字符串，并将其追加到htmlStr中。每个商品包括：
+      //图片：<img src="${item.img_big_logo}" alt="">
+      //标题：<p class="title">${item.title}
+      //价格信息：<div class="info">...</div>
+    })
+
+    ulBox.innerHTML = htmlStr;//将生成的HTML字符串插入到页面的ulBox元素中，渲染商品列表
+    totalEle.innerHTML = `${queryObj.current}/${PageTotal}`///更新页面上的分页信息，显示当前页码和总页数
+    // prevBtn.className = queryObj.current == 1 ? 'prev disable' : 'prev';
+    // nextBtn.className = queryObj.current == PageTotal ? 'next disable' : 'next';
+  }
+  getData()
+
+  // 点击首页
+  firstBtn.onclick = function () {/*点击首页按钮*/
+    if (queryObj.current == 1) return;/*如果当前页数为1，则不执行*/
+    queryObj.current = 1;/*设置当前页数为1*/
+    getData();/*调用getData函数获取数据*/
+  }
+// 点击末页
+  endBtn.onclick = function () {
+    if (queryObj.current == PageTotal) return;
+    queryObj.current = PageTotal;
+    getData();
+  }
+// 点击下一页事件
+  nextBtn.onclick = function () {
+    if (queryObj.current == PageTotal) return;
+    queryObj.current++;
+    getData()
+  }
+// 点击上一页事件
+  prevBtn.onclick = function () {
+    if (queryObj.current == 1) return;
+    queryObj.current--;
+    getData();
+  }
+// 跳转页数事件
+  jumpBtn.onclick = function () {
+    queryObj.current = parseInt(jumpnumber.value);/*设置当前页数为跳转页数*/
+    getData();/*调用getData函数获取数据*/
+    if (queryObj.current > PageTotal) {
+      alert('超出最大页数');
+      queryObj.current = PageTotal;/*设置当前页数为尾页*/
+      getData();
+      jumpnumber.value = PageTotal;/*设置跳转页数为尾页*/
+    }
+  }
+// 选择每页显示数量
+  selBtn.onchange = function () {
+    queryObj.pagesize = selBtn.value;/*设置每页显示数量*/
+    PageTotal = Math.ceil(PageTotal / queryObj.pagesize);/*设置总页数*/
+    queryObj.current = 1;/*设置当前页数为1*/
+    getData();/*调用getData函数获取数据*/
+    jumpnumber.value = ''/*清空跳转页数*/
+   
+  }
+  ulBox.onclick = async function(e){ /*点击商品列表*/
+    if(e.target.tagName == 'IMG'){/*如果点击的是商品图片*/
+        let res = await http.get('/goods/list', { params: queryObj })/*获得商品列表*/
+            let r = res.data.list;/*获得商品列表*/
+            r.forEach(function(item){/*遍历商品列表*/
+              if(e.target.src == item.img_big_logo)/*如果点击的是商品图片*/
+              {   
+                
+                localStorage.setItem('goods_id', item.goods_id);/*少了就全部一样了*/
+                
+                location.href = "./goods.html";/*跳转到商品详情页*/
+              }
+            }
+            )
+      
+    }
+  }
+
+</script>
+
+</html>

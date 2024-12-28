@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>登录页面</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+    width: 1200px;
+    margin: 0 auto;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: skyblue;
+    position: relative;
+    color: white
+  }
+
+    form {
+      width: 600px;
+      display: flex;/*flex布局*/
+      flex-direction: column;/*flex布局 垂直排列*/
+      padding: 20px;/*内边距*/
+      border: 3px solid pink;
+      border-radius: 15px;/*圆角*/
+      margin: 50px auto;/*外边距 水平居中*/
+      padding-top: 45px;/*上边距*/
+     position: relative;
+    }
+
+    form>label {/*标签*/
+      height: 60px;
+      font-size: 25px;
+    }
+
+    form>label>input {/*输入框*/
+      padding-left: 10px;/*左内边距*/
+      font-size: 22px;
+      width: 80%;
+    }
+
+    form>button {
+      font-size: 28px;
+      width: 100%;
+    }
+
+    form>span {/*错误提示*/
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);/*水平居中*/
+      top: 10px;
+      color: red;
+      font-size: 20px;
+    }
+
+    /*form>span.active {
+      display: block;
+    }*/
+  </style>
+</head>
+
+<body>
+
+  <h1>登录页面</h1>
+
+  <form>                    <!-- 表单，包含用户名密码输入框，登录按钮，以及错误提示，绑定提交事件，和阻止默认行为：默认提交 -->       
+    <span class="error"></span>
+    <label>
+      用户名: <input class="username" type="text">
+    </label>
+
+    <label>
+      密码: <input class="pwd" type="password" style="margin-left: 24px">
+    </label>
+
+    <label>
+      还没账号，<a href="./registe.html">去注册</a>
+    </label>
+
+    <button>登录</button>
+  
+  </form>
+  
+  <script src="./axios.min.js"></script>
+  <script src="./http.js"></script>
+  <script>
+    /*
+      登录
+        - 获取元素
+        - 给表单绑定一个表单提交事件
+          + 获取输入的表单数据
+            - 数据校验
+              + 不为空校验
+          + 请求服务器接口校验登录
+            - 根据响应的事件，提示是否登录成功
+              - 成功: 跳转到首页
+              - 失败: 显示错误信息
+            - 登录成功后，需要将用户信息存储到本地
+              - 用户名: 用户名
+              - 用户id: 用户id
+              - token: 登录成功后返回的token
+            - 注意: 默认登录用户信息
+              - 用户名: admin
+              - 密码: 123456
+    */
+    //  获取元素
+    let form = document.querySelector('form');
+    let errBox = document.querySelector('.error');
+    let nameInp = document.querySelector('.username');
+    let pwdInp = document.querySelector('.pwd');
+    
+    form.addEventListener('submit', async event => { /*给表单绑定一个表单提交事件*/
+ 
+    event.preventDefault();/*阻止表单默认提交*/
+
+      let username = nameInp.value;/*获取用户名*/
+      let password = pwdInp.value;/*获取密码*/
+      if (!username || !password) return alert('请完整填写表单')/*如果用户名或密码为空，则弹出提示信息*/
+
+      let res = await http.post('/users/login', { username: username, password: password })/*请求服务器接口校验登录*/
+
+      /*console.log(res.data)/*打印响应数据*/
+
+      // 根据响应的事件，提示是否登录成功
+      if (res.data.code != 1) {
+        /*errBox.style.display = 'block';/*显示错误提示*/
+        errBox.innerHTML = '用户名密码错误！';
+        return;
+      }
+      
+      //errBox.style.display = 'none';
+
+      // 将token和用户id存储到本地
+      localStorage.setItem('token', res.data.token);/*令牌*/
+      localStorage.setItem('uid', res.data.user.id);
+      //console.log(status)
+      alert('登录成功');
+      
+      // 跳转到首页
+      location.href = './index.html'
+
+    })
+
+
+
+
+  </script>
+</body>
+
+</html>

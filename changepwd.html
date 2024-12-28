@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>修改密码页面</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    width: 1200px;
+    margin: 0 auto;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: skyblue;
+    color: white;
+    position: relative;
+  }
+
+  h1>p {
+    font-size: 20px;
+    /* font-weight: 400; */
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 20px;
+  }
+
+  h1>p>a {
+    text-decoration: none;
+    color: red;
+  }
+
+  form input {
+    width: 400px;
+  }
+
+  form {
+    width: 600px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    border: 3px solid pink;
+    border-radius: 15px;
+    margin: 30px auto;
+    padding-top: 50px;
+    position: relative;
+  }
+
+  form>label {
+    height: 50px;
+    font-size: 22px;
+  }
+
+  form label a {
+    text-decoration: none;
+    color: skyblue;
+  }
+
+  form>label>input {
+    margin-left: 20px;
+    font-size: 22px;
+  }
+
+  form>label>select {
+    margin-left: 20px;
+    font-size: 22px;
+  }
+
+  form>button {
+    font-size: 22px;
+  }
+</style>
+
+<body>
+  <h1>修改密码
+    <!-- <p class="p1"><a href="">修改密码</a></p> -->
+    <p class="p2"><a href="./index.html">回到首页</a></p>
+  </h1>
+  <form>
+    <label>原始密码：<input class="oldPassword" type="password"></label>
+    <label>新密码：<input class="newPassword" type="password"style="margin-left: 43px"></label>
+    <label>确认新密码：<input class="rNewPassword" type="password"style="margin-left: 0px"></label>
+    <button>确认修改</button>
+  </form>
+</body>
+<script src="./axios.min.js"></script>
+<script src="./http.js"></script>
+<script>
+  const form = document.querySelector('form');/*获取表单*/
+  const oldPassword = document.querySelector('.oldPassword');
+  const newPassword = document.querySelector('.newPassword');
+  const rNewPassword = document.querySelector('.rNewPassword');
+
+  // 封装一个函数来用提交修改密码的发送请求
+  async function pwd() {
+    
+  // 校验信息完整性
+  if (oldPassword.value === '' || newPassword.value === '' || rNewPassword.value === '') {
+      alert('请填写完整信息');
+      return;
+    }
+    if (newPassword.value !== rNewPassword.value) {
+      alert('两次密码不一致');
+      return;
+    }
+    // 立即执行函数判断是否登录
+  let id = localStorage.getItem('uid')
+    let res = await http.post('/users/rpwd', { id:id, oldPassword: oldPassword.value, newPassword: newPassword.value, rNewPassword: rNewPassword.value })
+    //用户输入的密码信息发送到服务器，以请求修改用户的密码(id:id:用户的ID，标识哪个用户要重置密码)
+    //console.log(res.data.code);
+    if (res.data.code == 1) {
+      alert(res.data.message);
+      location.href = './login.html';
+    } else {
+      alert(res.data.message);/*如果修改失败，弹出错误信息*/
+    }
+  }
+
+  // 监听提交事件
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+    await pwd();
+  }
+  )
+
+</script>
+
+</html>

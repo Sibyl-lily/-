@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>首页</title>
+  <!-- 引入swiper文件 -->
+  <link rel="stylesheet" href="./lib/swiper/swiper-bundle.min.css">
+  <style>
+    * {
+      margin: 0 auto;
+      padding: 0;
+    }/*设置所有元素的默认外边距和内边距为0，并水平居中*/
+
+    h1 {
+    width: 1200px;
+    height: 80px;
+    display: flex;
+    justify-content: center;/*水平居中*/
+    align-items: center;/*垂直居中*/
+    background-color: skyblue;
+    position: relative;/*相对定位*/
+    color: white
+  }/*定义h1元素的样式：宽度1200px，高度80px，居中显示，背景色为天蓝色，文字为白色"仿站电商平台"*/
+
+    h2 {
+      text-decoration: none;
+      text-align: center;
+    }/*定义h2元素的样式：无下划线，居中对齐"购买商品"*/
+
+    h2 a {
+      font-size: 60px;
+      color: black;
+      margin: 10px;
+    }/*定义h2内链接的样式：字体大小60px，颜色黑色，外边距10px*/
+
+    h1>p {
+      font-size: 22px;
+      position: absolute;
+      top: 50%;/*垂直居中*/
+      transform: translateY(-50%);/*垂直居中*/
+      right: 25px;
+      display: none;
+    }/*定义h1内p元素的样式：字体大小18px，绝对定位，垂直居中，右边距25px，默认不显示(最上方）*/
+
+    h1>p.active {
+      display: block;
+    }/*定义h1内p元素在active类时显示(最右上方）*/
+    
+    h1>p>button {
+      padding: 5px 10px;
+      border: none;
+      border-radius: 6px;
+      background-color: #fff;
+      color: #000;
+      cursor: pointer;
+      font-size: 14px;
+    }/*（最右上方两个按钮）定义h1内p元素中button的样式：内边距5px 10px，无边框，圆角6px，背景白色，文字黑色，鼠标指针为手型，字体大小14px*/
+
+    /* 轮播图大小控制 */
+    .relay {
+      width: 1200px;
+    }/* 定义.relay类的样式：高度600px，宽度1200px*/
+
+   /* html,                       
+    body {
+      position: relative;
+      height: 100%;
+    }设置html和body的相对定位和高度为100%/
+
+    .swiper {
+      width: 100%;
+      height: 100%;
+    }/*定义.swiper类的样式：宽度和高度为100%*/
+
+    /*.swiper-slide {
+      text-align: center;
+      font-size: 8px;
+      background: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }定义.swiper-slide类的样式：居中对齐，字体大小8px，背景白色，使用Flexbox居中*/
+
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 600px;
+    }/* 定义.swiper-slide内img的样式：块级显示，宽度100%，高度600px*/
+
+    /*a {
+      color: red;
+      text-decoration: none;
+      font-size: 18px;
+    }定义链接的样式：颜色红色，无下划线，字体大小18px*/
+  </style>
+
+
+
+  <style type="text/css">
+    .swiper {
+      /* --swiper-theme-color: #ff6600;设置Swiper风格 */
+      --swiper-navigation-color: #dae9e8;
+      /* 单独设置箭头颜色 */
+      --swiper-navigation-size: 100px;
+      /* 设置按钮大小 */
+    }/*定义.swiper类的自定义CSS变量，用于设置Swiper的导航颜色和大小*/
+
+    a{
+      color: red;
+      text-decoration: none;
+    }/*定义链接的样式：颜色黑色，无下划线*/
+  </style>
+</head>
+
+
+
+
+<body>
+  <h1>
+    仿站电商平台
+    <p class="off ">
+    您好! <a href="./login.html">请登录</a></p>
+    <p class="on active"> 你好! <span class="nickname">leon</span>
+      <button class="personal-center">个人中心</button>
+      <button class="logout">退出登录</button>
+    </p>
+  </h1>
+
+  <h2>
+  <a href="./goods-list.html"> 购买商品</a></div>
+  </h2>
+
+  <script src="./axios.min.js"></script>
+  <script src="./http.js"></script>
+  <script>
+
+    let pEles = document.querySelectorAll('p');
+    //选择所有p元素并存储在pEles变量中
+
+    // 校验用户是否登录
+    async function fn() {
+      let {status, info, id} = await isLogin();
+    //定义一个异步函数fn，调用isLogin函数并解构返回的对象
+
+      //未登录
+      console.log(status);
+
+      if(status != 1){//未登录
+        pEles[0].classList.add('active');//显示登录
+        pEles[1].classList.remove('active');//隐藏注册
+        return;
+      }
+
+      // 已登录
+      pEles[0].classList.remove('active');//隐藏登录
+      pEles[1].classList.add('active');//显示注册
+      pEles[1].children[0].innerHTML = info.nickname;//显示用户名
+
+      pEles[1].addEventListener('click', ({target}) => {//点击个人中心按钮
+      console.log(target);//打印点击的元素
+
+      if(target.className =='personal-center'){//点击“个人中心”按钮时跳转到个人中心页面 
+        location.href = './personal-center.html';//跳转到个人中心页面
+      }
+
+      if(target.className == 'logout'){//点击“退出登录”按钮时退出登录
+        if(!confirm('确定退出登录吗?'))return;//弹出确认对话框，如果用户点击取消，则返回
+
+        //本地存储id移除
+        localStorage.removeItem('uid');//
+        localStorage.removeItem('token');
+
+       // http.get('/users/logout', { params: { id } })
+
+        pEles[0].classList.add('active');//显示登录
+        pEles[1].classList.remove('active');
+
+      }
+      });
+    }
+    fn();
+    
+  </script>
+  <!-- 下面是轮播图功能 -->
+  <div class="relay">
+    <div class="swiper mySwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide"><img src="./img/img1.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="./img/img2.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="./img/img3.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="./img/img4.jpg" alt=""></div>
+        <div class="swiper-slide"><img src="./img/img5.jpg" alt=""></div>
+      </div>
+      <div class="swiper-button-prev"></div><!--左箭头。如果放置在swiper外面，需要自定义样式。-->
+      <div class="swiper-button-next"></div><!--右箭头。如果放置在swiper外面，需要自定义样式。-->
+      <div class="swiper-pagination"></div>
+    </div>
+  </div>
+
+<!-- 定义一个轮播图组件，包含多个图片滑块和导航按钮-->
+
+  <!-- 引入swiper的js部分 -->
+  <!-- 首页轮播图功能 -->
+  <script src="./lib/swiper/swiper-bundle.min.js"></script>
+  <script>
+    var swiper = new Swiper(".mySwiper", {
+      pagination: {
+        el: ".swiper-pagination",
+      },
+      autoplay: {/*自动播放*/
+        delay: 1500,//1秒切换一次
+        pauseOnMouseEnter: true,
+      },//鼠标经过停止自动播放
+      navigation: {
+        nextEl: '.swiper-button-next',
+        prevEl: '.swiper-button-prev',
+      },
+    });
+  </script>
+
+
+</body>
+
+</html>

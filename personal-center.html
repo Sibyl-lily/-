@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>个人中心页面</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    h1 {
+      width: 1200px;
+      margin: 0 auto;
+      height: 80px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: skyblue;
+      color: white;
+      position: relative;
+    }
+
+    h1>p { /*获取p标签*/
+      font-size: 20px;
+      font-weight: 550; 
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      right: 20px;
+    }
+
+    h1>p>a {
+      text-decoration: none;
+      color: red;
+    }
+
+    h1>p.p1 { 
+      right: 110px
+    }
+
+    form {
+      width: 600px;/*获取表单*/
+      display: flex;
+      flex-direction: column;/*设置表单为垂直布局*/
+      padding: 20px;
+      border: 3px solid pink;
+      border-radius: 15px;
+      margin: 30px auto;
+      padding-top: 50px;
+      position: relative;
+    }
+
+    form>label {
+      height: 50px;
+      font-size: 22px;
+    }
+
+    form label a {
+      text-decoration: none;
+      color: skyblue;
+    }
+
+    form>label>input {/*获取输入框*/
+      margin-left: 20px; 
+      font-size: 22px;
+      width: 80%;
+      padding: 3px;
+    }
+
+    form>label>select {
+      margin-left: 20px;
+      font-size: 22px;
+      padding: 3px;
+    }
+
+    form>button {
+      font-size: 22px;
+      padding: 3px;
+      height: 45px;
+      width: 100%;
+      margin-top: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>个人中心
+    <p class="p1"><a href="./changepwd.html">修改密码</a></p>
+    <p class="p2"><a href="./index.html">回到首页</a></p>
+  </h1>
+
+  <form>
+    <label>
+      用户名：<input class="username" type="text" disabled style="margin-left: 0px"> 
+      <!-- 类名可以用于CSS样式或JavaScript脚本中选择该元素-->
+    </label>
+
+    <label>
+      年龄：<input class="age" type="text">
+    </label>
+
+    <label>
+      性别：<select name="gender">
+        <option value="choose">请选择</option>
+        <option value="男">男</option>
+        <option value="女">女</option>
+      </select>
+    </label>
+
+    <label>
+      昵称：<input class="nickname" type="text">
+    </label>
+
+    <button>确认修改</button>
+  </form>
+</body>
+
+<script src="./axios.min.js"></script>
+<script src="./http.js"></script>
+<script>
+  /*
+    个人中心页面
+      - 校验用户是否登录
+        +未登录跳转登录页面
+        +如果已登录
+          - 将用户信息渲染到页面中
+          - 实现修改用户信息功能
+  */
+  let form = document.querySelector('form');
+  let nameInp = document.querySelector('.username');
+  let ageInp = document.querySelector('.age');
+  let nickInp = document.querySelector('.nickname');
+  let genderSel = document.querySelector('select');
+
+  async function fn() {
+    //用户是否登录
+    let {status, info, id} = await isLogin();
+
+    if (status != 1) {
+      location.href = './login.html';
+      return;
+    };
+
+    //将用户信息渲染到页面中
+    //console.log(status, info);
+
+    nameInp.value = info.username;
+    ageInp.value = info.age;
+    genderSel.value = info.gender;
+    nickInp.value = info.nickname;
+    //如果去掉就不会显示
+
+    //console.log(nameInp.value, ageInp.value, genderSel.value, nickInp.value);
+  
+    //绑定表单提交事件
+    form.addEventListener('submit', async e => {
+      e.preventDefault();   //阻止默认提交事件
+      //请求携带的数据
+      let data = { id };
+
+      //数据不为空，加入请求携带对象中
+      if (ageInp.value) {data.age = ageInp.value};
+      if (genderSel.value) {data.gender = genderSel.value};
+      if (nickInp.value) {data.nickname = nickInp.value};
+      //去掉后不会修改
+      //console.log(nameInp.value, ageInp.value, genderSel.value, nickInp.value);
+
+
+      let r = await http.post('/users/update', data);
+      //console.log(r.data);
+      if (r.data.code != 1) {return alert('修改失败');}
+
+      alert('修改成功');
+      location.href = './personal-center.html';
+    })
+  }
+    
+  fn()
+
+</script>
+
+</html>

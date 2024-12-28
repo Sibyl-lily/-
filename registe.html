@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>注册页面</title>
+  <style>
+    * {
+      margin: 0 auto;
+      padding: 0;
+    }
+
+    h1 {
+    width: 1200px;
+    margin: 0 auto;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: skyblue;
+    position: relative;
+    color: white
+  }
+    form {
+      width: 600px;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      border: 3px solid pink;
+      border-radius: 15px;
+      margin: 50px auto;
+      padding-top: 50px; /*内*/
+      position: relative;
+    }
+
+    form>label {/*获取标签*/
+      height: 60px;
+      font-size: 22px;
+    }
+
+    form>label>input {/*获取输入框*/
+      padding-left: 10px;
+      font-size: 28px;
+      width: 75%;
+    }
+
+    form>button {/*获取按钮*/
+      font-size: 22px;
+      height: 40px;
+      width: 90%;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>注册页面</h1>
+  <form>
+
+    <label>
+      用户名: <input class="name" type="text" style="margin-left: 20px">
+    </label>
+    <label>
+      密　码: <input class="pwd" type="password" style="margin-left: 20px">
+    </label>
+    <label>
+      确认密码: <input class="rpwd" type="password" style="margin-left: -2px">
+    </label>
+    <label>
+      昵　称: <input class="nickname" type="text"style="margin-left: 20px">
+    </label>
+    <label>
+      已有账户,
+      <a href="./login.html">直接登录</a>
+    </label>
+
+    <button>注册</button>
+  </form>
+  <script src="./axios.min.js"></script>
+  <script src="./http.js"></script>
+  <script>
+
+    const form = document.querySelector('form');/*获取表单*/
+    const name = document.querySelector('.name');/*获取用户名*/
+    const pwd = document.querySelector('.pwd');/*获取密码*/
+    const rpwd = document.querySelector('.rpwd');/*获取确认密码*/
+    const nickname = document.querySelector('.nickname');/*获取昵称*/
+    const span = document.querySelector('span');/*获取错误提示*/
+//通过querySelector方法选择页面上的特定元素，并将它们存储在变量中,以便在后续的脚本中进行操作，如表单验证、数据提交、错误提示等
+
+
+    form.addEventListener('submit', async function (e) {/*给表单绑定一个表单提交事件*/
+      e.preventDefault();/*阻止表单默认提交*/
+
+      if (name.value === '' || pwd.value === '' || rpwd.value === '' || nickname.value === '') {/*如果用户名、密码、确认密码、昵称为空，则弹出提示信息*/
+        alert('请填写完整信息');
+        return;
+      }
+      if (pwd.value !== rpwd.value) {
+        alert('两次密码输入不一致');
+        return;
+      }
+      // 发送请求
+      let res = await http.post('/users/register', { username: name.value, password: pwd.value, rpassword: rpwd.value, nickname: nickname.value })/*请求服务器接口注册*/
+      if (res.data.code != 1) {
+        alert('注册失败');
+      } else {
+        alert("注册成功")
+        location.href = './login.html';
+      } 
+      
+
+    })
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>商品详情页面</title>
+</head>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+  }/*对齐*/
+
+  h1 {
+    width: 1200px;
+    margin: 0 auto;
+    height: 80px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: skyblue;
+    position: relative;
+    color: white
+  }/*最上方*/
+
+  h1>p {
+    font-size: 20px;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 25px;
+    /* display: none; */
+  }
+
+  h1>p>a {
+    color: red;
+    text-decoration: none;
+  }
+
+  ul li {
+    list-style: none;
+  }
+
+  ul {
+    width: 1200px;
+    height: 600px;
+    margin: 0 auto;
+    background-color: white;
+    /* display: flex; */
+    /* justify-content: space-between; */
+    /* border: 1px solid #000; */
+  }
+
+  ul li {
+    display: flex;
+    /* justify-content: space-around; */
+    justify-content: space-between;
+    /* align-items: center; */
+  }
+
+  ul li .right {
+    background-color: pink;
+    width: 595px;
+    height: 595px;
+    /* padding-top: 50px; */
+  }
+
+  ul li img {
+    width: 595px;
+    height: 100%;
+    /* display: block; */
+  }
+
+  ul li .title {
+    font-size: 24px;
+    margin: 60px 20px;
+  }
+
+  ul li .info p {
+    font-size: 40px;
+    margin: 70px 20px;
+  }
+
+  ul li .info p span {
+    color: red;
+  }
+
+  ul li .info .price1 {
+    text-decoration: line-through;
+    color: gray;
+  }
+
+  ul li .info .sale_type {
+    color: rgb(44, 199, 44);
+  }
+
+  ul li div img {
+    width: 1200px;
+    margin: 0 auto;
+    height: 300px;
+  }
+</style>
+
+<body>
+  <h1>商品详情页
+    <p><a href="./goods-list.html">回到列表页</a></p>
+  </h1>
+  <!-- <div class="container">
+    <div class="right"></div>
+    <div class="left"></div>
+    <div class="introducer"></div>
+  </div> -->
+
+  <ul>
+    <li>
+    </li>
+    <div>
+    </div>
+  </ul>
+</body>
+<script src="./axios.min.js"></script>
+<script src="./http.js"></script>
+<script>
+  
+  // 获取页面中的 ul 元素
+  let ulBox = document.querySelector('ul')
+
+  // 从本地存储中获取商品 ID
+  let goods_id = localStorage.getItem('goods_id')
+
+  // 异步函数，用于获取商品详情
+  async function getGoodsDetail() {
+
+  // 发送 GET 请求以获取商品信息
+    let res = await http.get('/goods/item', { params: { id: goods_id } })
+    console.log(res);
+ 
+  // info 里面存储着商品的详细信息
+    let item = res.data.info
+    let htmlStr = ''
+
+  // 构建商品详情的 HTML 字符串
+    htmlStr += `
+      <li>
+      <img src="${item.img_big_logo}" alt="">
+      <div class="right">
+      <p class="title">${item.title}</p>
+      <div class="info">
+        <p ><span>原价:￥</span><span class="price1">${item.price}</span></p>
+        <p><span>折扣:  </span><span class="sale_type">${item.sale_type = item.sale_type == '100%' ? '无折扣' : parseInt(item.sale_type) / 10 + '折'}</span></p>
+        <p><span>现价:￥${item.current_price}</span></p>
+      </li>
+      </div>
+      ${res.data.info.goods_introduce}
+      </div>
+      `
+  // 将构建的 HTML 字符串插入到 ul 元素中
+    ulBox.innerHTML = htmlStr
+  }
+
+  // 调用函数以获取商品详情
+  getGoodsDetail();
+</script>
+
+</html>
